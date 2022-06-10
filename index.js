@@ -91,9 +91,9 @@ async function openBalloon(map, coords, currentGeoObjects) {
 
 const formBalloon = `
 <form id="add-form">
-  <input type="text" placeholder="Название места" name="place"><br><br>
-  <input type="text" placeholder="Ваше имя" name="author"><br><br>
-  <textarea placeholder="Ваш отзыв" name="review" class="review__text"></textarea><br><br>
+  <input type="text" placeholder="Укажите ваше имя" name="place"><br><br>
+  <input type="text" placeholder="Укажите место" name="author"><br><br>
+  <textarea placeholder="Оставить отзыв" name="review" class="review__text"></textarea><br><br>
   <button id="add-btn">Добавить</button><br>
 </form>
 `
