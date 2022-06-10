@@ -1,3 +1,5 @@
+let clusterer
+
 document.addEventListener('DOMContentLoaded', () => {
   ymaps.ready(init);
   function init() {
