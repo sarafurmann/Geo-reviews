@@ -1,51 +1,6 @@
-.container {
-    width: 100%;
-    height: 100vh;
-  }
-  
-  #map {
+html, body, #map {
     width: 100%;
     height: 100%;
-  }
-  
-  .review {
-    border: 1px solid burlywood;
-    padding: 5px;
-    margin-bottom: 17px;
-    margin-right: 17px;
-    border-radius: 5px;
-    min-width: 235px;
-    max-width: 235px;
-    max-height: 550px;
-  }
-  
-  .review__container {
-    overflow-y: scroll;
-    max-height: 220px;
-    margin: 5px;
-    width: 100%;
-    margin-left: 17px;
-  }
-  
-  .review__text {
-    resize: none;
-  }
-  
-  #add-form {
-    margin: 5px;
-  }
-  
-  input, textarea {
-    width: 95%;
-    
-
-  }
-
-  button {
-    background-color: #FF8663;
-    color: #fff;
-    width: 107px;
-    height: 38px;
-    border-radius: 3px;
-    border-color: transparent;
-  }
+    padding: 0;
+    margin: 0;
+}
