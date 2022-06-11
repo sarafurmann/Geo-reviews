@@ -1,43 +1,18 @@
-<style>
-    html, body, #map {
-        width: 100%;
-        height: 100%;
-        padding: 0;
-        margin: 0;
-    }
-
-    .form {
-        width: 300px;
-    }
-
-    .form .field {
-        width: 100%;
-        margin-bottom: 10px;
-    }
-
-    .form .field input,
-    .form .field textarea {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    .form .field textarea {
-        resize: none;
-    }
-
-    .form .form-error {
-        color: red;
-    }
-
-    .form .review-list {
-        max-height: 500px;
-        overflow: scroll;
-    }
-</style>
-
-<div id="map"></div>
-
-<script type="template" id="addFormTemplate">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
+  <script src="https://api-maps.yandex.ru/2.1/?apikey=8ae25d65-41bb-45dc-8e43-1c660ed9e5e7&lang=ru_RU" type="text/javascript"></script>
+  <link rel="stylesheet" href="./main.css">
+  <title>GeoReviews</title>
+</head>
+<body>
+  <div class="container">
+    <div id="map"></div>
+  </div>
+  <script type="template" id="addFormTemplate">
     <div class="review-list"></div>
     <div class="form" data-role="review-form">
         <h3>Отзыв:</h3>
@@ -55,3 +30,6 @@
         <span class="form-error"></span>
     </div>
 </script>
+  <script src="./index.js"></script>
+</body>
+</html>
