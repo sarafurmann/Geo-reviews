@@ -1,0 +1,22 @@
+{
+    "proxy": {
+      "/homework_8/list": {
+        "target": "http://localhost:8181",
+        "pathRewrite": {
+          "^/homework_8": ""
+        }
+      },
+      "/homework_8/add": {
+        "target": "http://localhost:8181",
+        "pathRewrite": {
+          "^/homework_8": ""
+        }
+      },
+      "/homework_8/coords": {
+        "target": "http://localhost:8181",
+        "pathRewrite": {
+          "^/homework_8": ""
+        }
+      }
+    }
+}

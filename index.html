@@ -1,17 +1,590 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css">
-  <link rel="stylesheet" href="./main.css">
-  <title>GeoReviews</title>
-</head>
-<body>
-    <div class="container">
-        <div id="map"></div>
+<style>
+    @import url(https://fonts.googleapis.com/css2?family=Fira+Sans:wght@300;400;500);
+  
+    .clusterIcon {
+      width: 2rem;
+      height: 2rem;
+      position: relative;
+      z-index: 1;
+    }
+  
+    .clusterIcon::before {
+      content: '';
+      display: block;
+      width: 2rem;
+      height: 2rem;
+      position: absolute;
+      left: -50%;
+      top: -50%;
+      background-image: linear-gradient(to top, #ff7249 0%, #ff9e63 100%);
+      border-radius: 50%;
+      z-index: 0;
+    }
+  
+    html {
+      line-height: 1.15;
+    }
+  
+    body {
+      margin: 0
+    }
+  
+    main {
+      display: block
+    }
+  
+    h1 {
+      font-size: 2em;
+      margin: .67em 0
+    }
+  
+    hr {
+      box-sizing: content-box;
+      height: 0;
+      overflow: visible
+    }
+  
+    pre {
+      font-family: monospace, monospace;
+      font-size: 1em
+    }
+  
+    a {
+      background-color: transparent
+    }
+  
+    abbr[title] {
+      border-bottom: none;
+      text-decoration: underline;
+      -webkit-text-decoration: underline dotted;
+      text-decoration: underline dotted
+    }
+  
+    b, strong {
+      font-weight: bolder
+    }
+  
+    code, kbd, samp {
+      font-family: monospace, monospace;
+      font-size: 1em
+    }
+  
+    small {
+      font-size: 80%
+    }
+  
+    sub, sup {
+      font-size: 75%;
+      line-height: 0;
+      position: relative;
+      vertical-align: baseline
+    }
+  
+    sub {
+      bottom: -.25em
+    }
+  
+    sup {
+      top: -.5em
+    }
+  
+    img {
+      border-style: none
+    }
+  
+    button, input, optgroup, select, textarea {
+      font-family: inherit;
+      font-size: 100%;
+      line-height: 1.15;
+      margin: 0
+    }
+  
+    button, input {
+      overflow: visible
+    }
+  
+    button, select {
+      text-transform: none
+    }
+  
+    legend {
+      box-sizing: border-box;
+      color: inherit;
+      display: table;
+      max-width: 100%;
+      padding: 0;
+      white-space: normal
+    }
+  
+    progress {
+      vertical-align: baseline
+    }
+  
+    textarea {
+      overflow: auto
+    }
+  
+    details {
+      display: block
+    }
+  
+    summary {
+      display: list-item
+    }
+  
+    [hidden], template {
+      display: none
+    }
+  
+    @media screen and (max-width: 1200px) {
+      html {
+        font-size: 15px
+      }
+    }
+  
+    @media screen and (max-width: 768px) {
+      html {
+        font-size: 14px
+      }
+    }
+  
+    body, html {
+      height: 100%
+    }
+  
+    body {
+      font-family: Open Sans, Helvetica, sans-serif;
+      font-size: 1rem;
+      line-height: 1.42;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      color: #4f4f4f
+    }
+  
+    .wrapper {
+      overflow: hidden;
+      min-height: 100%;
+      position: relative
+    }
+  
+    .container {
+      margin: 0 auto;
+      max-width: 92.5rem;
+      width: 95%
+    }
+  
+    @media screen and (max-width: 480px) {
+      .container {
+        width: 85%
+      }
+    }
+  
+    .fullscreen-section {
+      height: 100vh;
+      min-height: 40.625rem
+    }
+  
+    button {
+      border: 0;
+      cursor: pointer
+    }
+  
+    * {
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box
+    }
+  
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style: none
+    }
+  
+    h1, h2, h3, h4, h5, h6 {
+      font-weight: 400;
+      margin: 0
+    }
+  
+    p {
+      margin: 0;
+      padding: 0
+    }
+  
+    button[type=button] {
+      cursor: pointer;
+      background-color: transparent
+    }
+  
+    a {
+      color: inherit;
+      cursor: pointer
+    }
+  
+    img {
+      display: block;
+      max-width: 100%;
+      max-height: 100%
+    }
+  
+    #map {
+      width: 100vw;
+      height: 100vh
+    }
+  
+    body {
+      position: relative
+    }
+  
+    .main {
+      padding: .9375rem
+    }
+  
+    .logo {
+      position: absolute;
+      right: 3.125rem;
+      bottom: 3.125rem;
+      width: 6.875rem;
+      height: 5rem;
+      background-image: url(/0247cb821b87d4bbd33821286a90466e.png);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: 50%
+    }
+  
+    .form {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+      flex-flow: column nowrap;
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start
+    }
+  
+    .form__title {
+      color: #ff8663;
+      font-size: 1rem;
+      font-weight: 500;
+      font-style: normal;
+      letter-spacing: normal;
+      line-height: normal;
+      text-align: left;
+      text-transform: uppercase;
+      margin-bottom: .9375rem
+    }
+  
+    .form__input, .form__label {
+      width: 100%;
+      height: 100%
+    }
+  
+    .form__input {
+      border: 1px solid #c4c4c4;
+      background-color: #fff;
+      margin-bottom: .9375rem;
+      border-radius: 30px;
+      font-size: .9375rem;
+      font-weight: 300;
+      font-style: normal;
+      letter-spacing: normal;
+      line-height: 1.375rem;
+      text-align: left;
+      padding: .625rem .9375rem
+    }
+  
+    .form__input::-webkit-input-placeholder {
+      color: #9f9f9f
+    }
+  
+    .form__input::-moz-placeholder {
+      color: #9f9f9f
+    }
+  
+    .form__input:-ms-input-placeholder {
+      color: #9f9f9f
+    }
+  
+    .form__input::-ms-input-placeholder {
+      color: #9f9f9f
+    }
+  
+    .form__input::placeholder {
+      color: #9f9f9f
+    }
+  
+    .form__input:focus {
+      outline: none
+    }
+  
+    .form__input:focus, .form__input:hover {
+      border: 1px solid #ff8663
+    }
+  
+    .form__input--name, .form__input--surname {
+      max-height: 1.875rem
+    }
+  
+    .form__input--textarea {
+      border-radius: 10px;
+      max-height: 8.125rem;
+      resize: none
+    }
+  
+    .form__footer {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+      flex-flow: row nowrap;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start;
+      width: 100%;
+      position: relative
+    }
+  
+    .form__button-placeholder, .form__error-placeholder {
+      max-width: 50%
+    }
+  
+    .form__error-placeholder {
+      color: red;
+      text-align: left
+    }
+  
+    .form__button, .form__error-placeholder {
+      font-size: .75rem;
+      font-weight: 300;
+      font-style: normal;
+      letter-spacing: normal;
+      line-height: normal
+    }
+  
+    .form__button {
+      width: 6.25rem;
+      height: 1.875rem;
+      border-radius: 30px;
+      color: #fff;
+      text-align: center
+    }
+  
+    .form__button, .header {
+      background-color: #ff8663
+    }
+  
+    .header {
+      width: 100%;
+      max-width: 25rem;
+      min-height: 2.8125rem;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      padding: .9375rem
+    }
+  
+    .header, .header__left {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex
+    }
+  
+    .header__left {
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start
+    }
+  
+    .header__left, .header__right {
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+      flex-flow: row nowrap;
+      -webkit-box-align: end;
+      -ms-flex-align: end;
+      align-items: flex-end;
+      max-height: .8125rem
+    }
+  
+    .header__right {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: end;
+      -ms-flex-pack: end;
+      justify-content: flex-end
+    }
+  
+    .address {
+      color: #fff;
+      font-family: Fira Sans;
+      font-size: .875rem;
+      font-weight: 400;
+      font-style: normal;
+      letter-spacing: normal;
+      line-height: normal;
+      text-align: left;
+      line-height: .8125rem
+    }
+  
+    .close-icon {
+      cursor: pointer;
+      width: .9375rem;
+      height: .9375rem;
+      background: url("data:image/svg+xml;charset=utf-8,%3Csvg viewBox='0 0 365.696 365.696' xmlns='http://www.w3.org/2000/svg' fill='%23fff'%3E%3Cpath d='M243.188 182.86L356.32 69.726c12.5-12.5 12.5-32.766 0-45.247L341.238 9.398c-12.504-12.503-32.77-12.503-45.25 0L182.86 122.528 69.727 9.374c-12.5-12.5-32.766-12.5-45.247 0L9.375 24.457c-12.5 12.504-12.5 32.77 0 45.25l113.152 113.152L9.398 295.99c-12.503 12.503-12.503 32.769 0 45.25l15.082 15.08c12.5 12.5 32.766 12.5 45.247 0l113.132-113.132L295.99 356.32c12.503 12.5 32.769 12.5 45.25 0l15.081-15.082c12.5-12.504 12.5-32.77 0-45.25zm0 0'/%3E%3C/svg%3E") top no-repeat
+    }
+  
+    .map-marker--before-heading {
+      margin-right: .625rem;
+      width: .9375rem;
+      height: .9375rem;
+      background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 438.536 438.536' fill='%23fff'%3E%3Cpath d='M322.621 42.825C294.073 14.272 259.619 0 219.268 0c-40.353 0-74.803 14.275-103.353 42.825-28.549 28.549-42.825 63-42.825 103.353 0 20.749 3.14 37.782 9.419 51.106l104.21 220.986c2.856 6.276 7.283 11.225 13.278 14.838 5.996 3.617 12.419 5.428 19.273 5.428 6.852 0 13.278-1.811 19.273-5.428 5.996-3.613 10.513-8.562 13.559-14.838L356.02 197.284c6.282-13.324 9.424-30.358 9.424-51.106.005-40.353-14.268-74.8-42.823-103.353zm-51.679 155.03c-14.273 14.272-31.497 21.411-51.674 21.411s-37.401-7.139-51.678-21.411c-14.275-14.277-21.414-31.501-21.414-51.678 0-20.175 7.139-37.402 21.414-51.675 14.277-14.275 31.504-21.414 51.678-21.414 20.177 0 37.401 7.139 51.674 21.414 14.274 14.272 21.413 31.5 21.413 51.675 0 20.175-7.138 37.398-21.413 51.678z'/%3E%3C/svg%3E") top no-repeat
+    }
+  
+    .pop-up {
+      font-family: Fira Sans;
+      color: #4f4f4f;
+      width: 100%;
+      height: 100%;
+      max-width: 25rem;
+      max-height: 33.125rem;
+      background-color: #fff;
+      margin-bottom: .0625rem;
+      border-radius: 15px;
+      overflow: hidden
+    }
+  
+    .reviews__list {
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: column nowrap;
+      flex-flow: column nowrap;
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start;
+      border-bottom: 1px solid #f0f0f0;
+      margin-bottom: .9375rem;
+      max-height: 8.125rem;
+      overflow: scroll;
+      display: flex;
+    }
+  
+    .reviews__list::-webkit-scrollbar {
+      width: .1875rem
+    }
+  
+    .reviews__list::-webkit-scrollbar-thumb {
+      background: #c4c4c4
+    }
+  
+    .review__item {
+      max-width: 100%;
+      -webkit-box-flex: 1;
+      -ms-flex: 1 1 100%;
+      flex: 1 1 100%;
+      /*margin-bottom: 1.5625rem*/
+    }
+  
+    .review__heading {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: horizontal;
+      -webkit-box-direction: normal;
+      -ms-flex-flow: row nowrap;
+      flex-flow: row nowrap;
+      -webkit-box-pack: start;
+      -ms-flex-pack: start;
+      justify-content: flex-start;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start
+    }
+  
+    .review__author {
+      color: #4f4f4f;
+      font-weight: 500;
+      margin-right: .625rem
+    }
+  
+    .review__author, .review__date, .review__location {
+      font-size: 1rem;
+      font-style: normal;
+      letter-spacing: normal;
+      line-height: normal;
+      text-align: left
+    }
+  
+    .review__date, .review__location {
+      opacity: .75;
+      font-weight: 400
+    }
+  
+    .review__location {
+      margin-right: .625rem
+    }
+  
+    .review__date {
+      font-style: .875rem
+    }
+  
+    .review__content {
+      font-size: .9375rem;
+      font-weight: 400;
+      font-style: normal;
+      letter-spacing: normal;
+      line-height: 1.375rem;
+      text-align: left
+    }
+  </style>
+  <div id="map"></div>
+  
+  <script type="template" id="addFormTemplate">
+    <div class="pop-up">
+      <div class="header">
+        <div class="header__left">
+          <div class="map-marker map-marker--before-heading"></div>
+          <div class="address" data-role="click-address"></div>
+        </div>
+        <div class="header__right">
+          <div class="close-icon"></div>
+        </div>
       </div>
-    <script src="./index.js"></script>
-</body>
-</html>
+      <div class="main">
+        <ul class="reviews__list">
+  
+        </ul>
+        <form class="form" data-role="review-form">
+          <h3 class="form__title">ВАШ ОТЗЫВ</h3>
+          <div class="form__label"><input class="form__input form__input--name" data-role="review-name" type="text"
+                                          placeholder="Укажите ваше имя" required/></div>
+          <div class="form__label"><input class="form__input form__input--surname" data-role="review-place" type="text"
+                                          placeholder="Укажите место" required/></div>
+          <div class="form__label"><textarea class="form__input form__input--textarea" data-role="review-text"
+                                             placeholder="Оставьте отзыв" rows="5" required></textarea></div>
+          <div class="form__footer">
+            <div class="form__error-placeholder"><span class="form-error"></span></div>
+            <div class="form__button-placeholder">
+              <button class="form__button" data-role="review-add">Добавить</button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </script>
