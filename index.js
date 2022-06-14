@@ -65,6 +65,7 @@ function getGeoObjects(map) {
   map.geoObjects.add(clusterer)
 }
 
+
 async function openBalloon(map, coords, currentGeoObjects) {
   await map.balloon.open(coords, {
     content: `<div class="reviews">${getReviewList(currentGeoObjects)}</div>` + formBalloon,
@@ -89,7 +90,10 @@ async function openBalloon(map, coords, currentGeoObjects) {
 
 
 
+
+
 const formBalloon = `
+<h3>Отзыв:</h3>
 <form id="add-form">
   <input type="text" placeholder="Укажите ваше имя" name="place"><br><br>
   <input type="text" placeholder="Укажите место" name="author"><br><br>
